@@ -1,12 +1,16 @@
 name: Testing
+
 on: push
 
 jobs:
   test_project:
-    rums-on: ubuntu-latest
+    runs-on: ubuntu-latest
+
     steps:
-    -uses: actions/checkout@v2
-    -name: Run Django unit tests
-      run: |
-        pip3 install --user Django
-        python3 manage.py test
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Django unit tests
+        run: |
+          pip3 install Django
+          python3 manage.py test
