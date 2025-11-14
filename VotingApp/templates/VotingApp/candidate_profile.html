@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ candidate.name }} - Candidate Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #F8FAF5;
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.05);
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .candidate-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #0b6623;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #0b6623;
+            margin-bottom: 10px;
+        }
+
+        .candidate-position {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .vote-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b6623;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .profile-sections {
+            display: grid;
+            gap: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #0b6623;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #0b6623;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #0b6623, #28a745);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .manifesto {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .vote-btn {
+            background: linear-gradient(45deg, #0b6623, #28a745);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .vote-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(11, 102, 35, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .profile-card {
+                padding: 20px;
+            }
+            
+            .vote-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back
+    </a>
+
+    <div class="container">
+        <div class="profile-card">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                {% if candidate.image %}
+                    <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}" class="candidate-image">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" alt="No Image" class="candidate-image">
+                {% endif %}
+                
+                <h1 class="candidate-name">{{ candidate.name }}</h1>
+                <p class="candidate-position">Candidate for {{ candidate.position.name }}</p>
+                
+                <div class="vote-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ vote_count }}</div>
+                        <div class="stat-label">Votes Received</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ vote_percentage }}%</div>
+                        <div class="stat-label">Vote Share</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ total_position_votes }}</div>
+                        <div class="stat-label">Total Votes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Sections -->
+            <div class="profile-sections">
+                <!-- Personal Information -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user"></i>
+                        Personal Information
+                    </h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Matric Number</div>
+                                <div class="info-value">{{ candidate.matric }}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">State of Origin</div>
+                                <div class="info-value">{{ candidate.state_of_origin }}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Course of Study</div>
+                                <div class="info-value">{{ candidate.course_of_study }}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Level</div>
+                                <div class="info-value">{{ candidate.level }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Manifesto -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-bullhorn"></i>
+                        Campaign Manifesto
+                    </h2>
+                    <div class="manifesto">
+                        <p>As a candidate for {{ candidate.position.name }}, I am committed to representing the interests of all students and working towards a better university experience for everyone.</p>
+                        
+                        <p><strong>My Vision:</strong> To create an inclusive, supportive, and progressive student community where every voice is heard and valued.</p>
+                        
+                        <p><strong>Key Priorities:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Improving student welfare and support services</li>
+                            <li>Enhancing academic resources and facilities</li>
+                            <li>Promoting diversity and inclusion</li>
+                            <li>Strengthening student representation</li>
+                            <li>Fostering community engagement and leadership</li>
+                        </ul>
+                        
+                        <p><strong>My Promise:</strong> I will work tirelessly to ensure that your concerns are addressed and your aspirations are supported. Together, we can build a stronger, more vibrant university community.</p>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="{% url 'vote' %}" class="vote-btn">
+                        <i class="fas fa-vote-yea"></i>
+                        Vote for {{ candidate.name }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
